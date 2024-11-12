@@ -37,6 +37,7 @@ secure:
       - /product/**
       - /brand/**
       - /alipay/**
+      - /weixin/**
 
 # 自定义redis key
 redis:
@@ -59,3 +60,9 @@ rabbitmq:
     name:
       cancelOrder: cancelOrderQueue
 
+open-api:
+  weixin-open-api:
+    service-name: weixin-open-api
+    url: https://api.weixin.qq.com
+    appid: wxa7501d395256714b
+    secret: 8299f8a50640b1241e61d90255d43077

@@ -26,6 +26,13 @@ public interface UmsMemberService {
     void register(String username, String password, String telephone, String authCode);
 
     /**
+     * 用户注册
+     */
+    @Transactional
+    void register(String username, String password);
+
+
+    /**
      * 生成验证码
      */
     String generateAuthCode(String telephone);

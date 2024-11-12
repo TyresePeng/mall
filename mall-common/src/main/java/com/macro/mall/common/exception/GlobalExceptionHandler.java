@@ -1,7 +1,7 @@
 package com.macro.mall.common.exception;
 
-import cn.hutool.core.util.StrUtil;
 import com.macro.mall.common.api.CommonResult;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -17,11 +17,12 @@ import java.sql.SQLSyntaxErrorException;
  * Created by macro on 2020/2/27.
  */
 @ControllerAdvice
+@Log4j2
 public class GlobalExceptionHandler {
 
     @ResponseBody
     @ExceptionHandler(value = ApiException.class)
-    public CommonResult handle(ApiException e) {
+    public CommonResult<String> handle(ApiException e) {
         if (e.getErrorCode() != null) {
             return CommonResult.failed(e.getErrorCode());
         }
@@ -30,7 +31,7 @@ public class GlobalExceptionHandler {
 
     @ResponseBody
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
-    public CommonResult handleValidException(MethodArgumentNotValidException e) {
+    public CommonResult<String> handleValidException(MethodArgumentNotValidException e) {
         BindingResult bindingResult = e.getBindingResult();
         String message = null;
         if (bindingResult.hasErrors()) {
@@ -58,11 +59,15 @@ public class GlobalExceptionHandler {
 
     @ResponseBody
     @ExceptionHandler(value = SQLSyntaxErrorException.class)
-    public CommonResult handleSQLSyntaxErrorException(SQLSyntaxErrorException e) {
-        String message = e.getMessage();
-        if (StrUtil.isNotEmpty(message) && message.contains("denied")) {
-            message = "演示环境暂无修改权限，如需修改数据可本地搭建后台服务！";
-        }
-        return CommonResult.failed(message);
+    public CommonResult<String> handleSQLSyntaxErrorException(SQLSyntaxErrorException e) {
+        return CommonResult.failed(e.getMessage());
     }
+    @ResponseBody
+    @ExceptionHandler(value = BusinessException.class)
+    public CommonResult<String> handleBusinessException(BusinessException e) {
+        log.error(e.getMessage(),e);
+        return CommonResult.failed(e.getMessage());
+    }
+
+
 }
