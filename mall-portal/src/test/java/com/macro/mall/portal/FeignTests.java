@@ -22,8 +22,6 @@ public class FeignTests {
     private WeChatUserController weChatUserController;
     @Test
     public void contextLoads() {
-        String dada = weChatUserController.login("dada");
-        System.err.println(dada);
 
     }
 }
